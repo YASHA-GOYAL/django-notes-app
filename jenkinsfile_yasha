@@ -18,7 +18,17 @@ pipeline {
                 }
             }
         }
-
+            stage("Build") {
+            steps {
+                script{
+                   docker_build("notes-app","latest","yasha1502")
+                }
+            }
+        }
+        stage("Push to Docker") {
+            steps {
+                echo 'This is pushing the image to docker Hub.'
+                withCredentials([usernamePassword(
                     credentialsId: 'dockerHubCred',
                     passwordVariable: 'dockerHubPass',
                     usernameVariable: 'dockerHubUser')]) {
