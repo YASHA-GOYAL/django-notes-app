@@ -20,8 +20,9 @@ pipeline {
         }
         stage("Build") {
             steps {
-                echo 'this is Building the code.'
-                sh 'docker build -t notes-app:latest .'
+                script{
+                   docker_build("notes-app","latest","yasha1502")
+                }
             }
         }
         stage("Push to Docker") {
