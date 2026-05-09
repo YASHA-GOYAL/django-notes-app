@@ -1,2 +1,44 @@
+@Library("shared") _
+pipeline {
+    agent {
+        label 'vinod'
+    }
+    stages {
+        stage("Hello") {
+            steps {
+                script {
+                    hello()
+                }
+            }
+        }
+        stage("Code") {
+            steps {
+                script {
+                    clone('https://github.com/YASHA-GOYAL/django-notes-app.git','main')
+                }
+            }
+        }
 
- 
+                    credentialsId: 'dockerHubCred',
+                    passwordVariable: 'dockerHubPass',
+                    usernameVariable: 'dockerHubUser')]) {
+                        sh "docker login -u ${dockerHubUser} -p ${dockerHubPass}"
+                        sh "docker image tag notes-app:latest ${dockerHubUser}/notes-app:latest"
+                        sh "docker push ${dockerHubUser}/notes-app:latest"
+                    }
+            }
+        }
+        stage("Test") {
+            steps {
+                echo 'this is Testing the code.'
+            }
+        }
+        stage("Deploy") {
+            steps {
+                echo 'this is Deploying the code.'
+                sh 'docker compose down || true'
+                sh 'docker compose up -d'
+            }
+        }
+    }
+}
